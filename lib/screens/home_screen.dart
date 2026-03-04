@@ -1,4 +1,5 @@
 import 'package:film/models/movie.dart';
+import 'package:film/screens/detail_screen.dart';
 import 'package:film/services/api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -42,14 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Film')),
+      appBar: AppBar(title: const Text('Pilem')),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildMovieList('All Movie', _allMovies),
-            _buildMovieList('Trending Movie', _trendingMovies),
-            _buildMovieList('Popular Movie', _popularMovies),
+            _buildMovieList('All Movies', _allMovies),
+            _buildMovieList('Trending Movies', _trendingMovies),
+            _buildMovieList('Popular Movies', _popularMovies),
           ],
         ),
       ),
@@ -74,24 +75,32 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: movies.length,
             itemBuilder: (context, index) {
               final Movie movie = movies[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Image.network(
-                      'https://image.tmdb.org/t/p/w500/${movie.posterpath}',
-                      height: 150,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      movie.title.length > 14
-                          ? '${movie.title.substring(0, 10)}...'
-                          : movie.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailScreen(movie: movie),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                        height: 150,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        movie.title.length > 14
+                            ? '${movie.title.substring(0, 10)}...'
+                            : movie.title,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
